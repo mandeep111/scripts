@@ -17,19 +17,26 @@ def load_env_variables(file_path):
                     print(key + '=' + value)
 
 
-def compile_and_run(project_location):
+def compile_and_run(project_location, app_name, env_filename):
     try:
         os.chdir(project_location)
-        env_file_path = os.path.join(project_location, 'app_env.txt')
-        load_env_variables(env_file_path)
+        if env_filename != '':
+            env_file_path = os.path.join(project_location, env_filename+'.txt')
+            load_env_variables(env_file_path)
         # subprocess.run(['mvn', 'clean', 'install'])
         subprocess.run('mvn clean install', shell=True, check=True)
-        subprocess.run(['java', '-jar', 'target/app.jar'])
+        subprocess.run(['java', '-jar', 'target/'+app_name+'.jar'])
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
+    app_name = input("Enter jar file name excluding (.jar): ")
+    use_env = input("Do you want to use environment variables for your project? (y/n): ").strip().lower()
+    env_filename = ''
+    if use_env == 'y':
+        env_filename = input("Enter environment file name (.txt format): ")
+
     choice = input("Do you want to use the current directory as the project location? (y/n): ").strip().lower()
     if choice == 'y':
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -37,4 +44,4 @@ if __name__ == "__main__":
         compile_and_run(current_directory)
     else:
         project_location = input("Enter the project location: ").strip()
-        compile_and_run(project_location)
+        compile_and_run(project_location, app_name, env_filename)
