@@ -34,14 +34,14 @@ if __name__ == "__main__":
     app_name = input("Enter jar file name excluding (.jar): ")
     use_env = input("Do you want to use environment variables for your project? (y/n): ").strip().lower()
     env_filename = ''
+    project_location = ''
     if use_env == 'y':
         env_filename = input("Enter environment file name (.txt format): ")
 
     choice = input("Do you want to use the current directory as the project location? (y/n): ").strip().lower()
     if choice == 'y':
-        current_directory = os.path.dirname(os.path.abspath(__file__))
+        project_location = os.path.dirname(os.path.abspath(__file__))
         print("Using the current directory:", current_directory)
-        compile_and_run(current_directory)
     else:
         project_location = input("Enter the project location: ").strip()
-        compile_and_run(project_location, app_name, env_filename)
+    compile_and_run(project_location, app_name, env_filename)
